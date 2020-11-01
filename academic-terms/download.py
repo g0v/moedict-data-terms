@@ -16,7 +16,7 @@ def load_all_categories() -> list[str]:
     """
     categories = []
     try:
-        with open(os.path.join('raw_data', 'categories.csv')) as f:
+        with open(os.path.join('data', 'categories.csv')) as f:
             for line in f:
                 i = line.index(',')
                 categories.append(line[:i])
@@ -48,7 +48,7 @@ def download_category(category: str) -> list[str]:
         ext_index = filename.index('.xls')   # It’s actually HTML. LIES!
 
         # Change the extension and write them all into target directory
-        file_path = os.path.join('raw_data', 'html', filename[:ext_index] + '.html')
+        file_path = os.path.join('data', 'html', filename[:ext_index] + '.html')
         with open(file_path, 'wb') as f:
             f.write(zip_archive.read(zip_item))
 

@@ -61,7 +61,7 @@ if __name__ == '__main__':
     elif '--help' in sys.argv:
         print_usage()
     else:
-        with open(os.path.join('raw_data', 'categories.csv'), 'r') as f:
+        with open(os.path.join('data', 'categories.csv'), 'r') as f:
             load_categories(file=f)
 
     # NOTE: Categories without available file to download are only the names of
