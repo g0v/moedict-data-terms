@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import re
 import requests
 import sys
@@ -9,7 +10,7 @@ from zipfile import ZipFile
 def load_all_categories():
     categories = []
     try:
-        with open('raw_data/categories.csv') as f:
+        with open(os.path.join('raw_data', 'categories.csv')) as f:
             for line in f:
                 i = line.index(',')
                 categories.append(line[:i])
@@ -23,10 +24,17 @@ def download_category(category):
         zip_archive = ZipFile(BytesIO(r.content))
         assert zip_archive.testzip() is None
 
-        # Recursively download and extract the HTML
-        for zip_item in zip_archive.infolist():
-            assert zip_item.filename.endswith('.xls')   # It’s actually HTML. LIES!
-            zip_archive.extract(zip_item, path=f'raw_data/')
+    # Recursively download and extract the HTML
+    for zip_item in zip_archive.infolist():
+        filename = zip_item.filename
+        ext_index = filename.index('.xls')   # It’s actually HTML. LIES!
+
+        # Change the extension and write them all into target directory
+        filename = filename[:ext_index] + '.html'
+        with open(os.path.join('raw_data', 'html', filename), 'wb') as f:
+            f.write(zip_archive.read(zip_item))
+
+        print(filename)
 
 def print_usage():
     print('Usage: download_terms.py [categories...]')
