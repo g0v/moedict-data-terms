@@ -4,7 +4,7 @@ import re
 import sys
 from enum import Enum
 
-def convert(filename):
+def convert(filename: str):
     # Read the whole file into string buffer
     with open(filename, 'r') as f:
         s = f.read()
@@ -43,6 +43,9 @@ def convert(filename):
         elif matched_tag['name'] == '/tr':
             buf.write('\n')
             need_comma = False
+
+    buf.flush()
+
 
 def print_usage():
     print('Usage: html_to_csv.py <filename>')

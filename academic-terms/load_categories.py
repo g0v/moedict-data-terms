@@ -43,16 +43,16 @@ def show_empty_categories(file=None) -> list[str]:
 
     # Bonus: warns about categories without files
     empty_pattern = re.compile(r'<a href="" title="沒有檔案" onclick="return false;">(?P<name>[^<]+)</a>')
-    categorie_names = []
+    category_names = []
     for match in empty_pattern.finditer(response):
-        categorie_names.append(match['name'])
+        category_names.append(match['name'])
         print('WARN: No file provided by', match['name'], file=file)
 
-    return categorie_names
+    return category_names
 
 
 def print_usage():
-    print('Usage: get_term_categories.py [-]')
+    print('Usage: load_categories.py [-]')
 
 
 if __name__ == '__main__':
@@ -61,7 +61,7 @@ if __name__ == '__main__':
     elif '--help' in sys.argv:
         print_usage()
     else:
-        with open(os.path.join('data', 'categories.csv'), 'r') as f:
+        with open(os.path.join('data', 'categories.csv'), 'w+') as f:
             load_categories(file=f)
 
     # NOTE: Categories without available file to download are only the names of

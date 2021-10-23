@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import re
 import requests
 import sys
 from io import BytesIO
@@ -22,7 +21,8 @@ def load_all_categories() -> list[str]:
                 categories.append(line[:i])
             return categories
     except FileNotFoundError:
-        print('Specify a category ID or run `get_term_categories.py` first.', file=sys.stderr)
+        print('Specify a category ID or run `load_categories.py` first.', file=sys.stderr)
+        raise
 
 
 def download_category(category: str) -> list[str]:
@@ -53,7 +53,7 @@ def download_category(category: str) -> list[str]:
             f.write(zip_archive.read(zip_item))
 
         file_paths.append(file_paths)
-        print(file_path)
+        print(f'Extracting {file_path}')
 
     return file_paths
 
