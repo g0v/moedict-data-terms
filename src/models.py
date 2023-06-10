@@ -10,7 +10,7 @@ class Category:
     name: str
     last_updated: datetime
     data_url: str
-    data_files: list[str] = field(repr=False)
+    data_files: list[str] = field(repr=False, default=[])
 
 
 def save(fp: typing.IO, categories: list[Category]) -> None:
@@ -30,8 +30,7 @@ def save(fp: typing.IO, categories: list[Category]) -> None:
 
 def restore(fp: typing.IO) -> list[Category]:
     """
-    Helper function to load previous category memory when executed
-    as a standalone script without specifying the desired category ID.
+    Helper function to load previous list of categories.
     """
     return list([
         Category(

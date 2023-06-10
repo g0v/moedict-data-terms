@@ -4,6 +4,7 @@ import os
 import re
 import requests
 import sys
+from .models import Category, save
 from bs4 import BeautifulSoup
 from datetime import datetime
 from urllib.parse import urljoin
@@ -20,14 +21,11 @@ def parse_date(string: str) -> datetime:
     raise ValueError('Failed to parse string as date')
 
 
-def load_categories(file=None) -> list[tuple[str, str, datetime, str]]:
+def download_categories() -> list[Category]:
     """
     Downloads all the categories listed on the Download page of NAER.
     Returns a list of tuples (ID, name, last updated on, data file URL).
     """
-
-    # Defaults to stdout
-    file = file or sys.stdout
 
     with requests.get(NAER_INDEX_URL) as r:
         soup = BeautifulSoup(r.text, 'html.parser')
@@ -39,8 +37,7 @@ def load_categories(file=None) -> list[tuple[str, str, datetime, str]]:
         last_updated = parse_date(row.select_one('div.td[aria-label="更新日期"]').string.strip())
         data_url = urljoin(NAER_BASE_URL, row.select_one('a[title="下載"]')['href'])
 
-        categories.append((cat_id, name, last_updated, data_url))
-        print(cat_id, name, last_updated.isoformat(sep=' '), data_url, sep=',', file=file)
+        categories.append(Category(category_id=cat_id, name=name, last_updated=last_updated, data_url=data_url))
 
     return categories
 
@@ -50,10 +47,10 @@ def print_usage():
 
 
 if __name__ == '__main__':
-    if '-' in sys.argv:
-        load_categories()   # Write to stdout
-    elif '--help' in sys.argv:
+    if '--help' in sys.argv:
         print_usage()
     else:
-        with open(os.path.join('data', 'categories.csv'), 'w+') as f:
-            load_categories(file=f)
+        file = sys.stdout if '-' in sys.argv else open(os.path.join('data', 'categories.csv'), 'w+')
+        categories = download_categories()
+        with file as f:
+            save(file, categories)
