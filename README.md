@@ -1,8 +1,9 @@
-moedict-data-terms
-==================
+國教院學術名詞資料
+==============
 
-開放語料庫專案
+Proposed on g0v #general & [moed24t](https://g0v.hackmd.io/@tmonk/HyWeQ9cww).
 
-### 雙語詞彙資料庫 [`public-terms`](public-terms/README.md)
+授權
+----
 
-### 學術名詞資料庫 [`academic-terms`](academic-terms/README.md)
+以 [MIT License](LICENSE.md) 公眾授權釋出。
